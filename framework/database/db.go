@@ -3,8 +3,8 @@ package database
 import (
 	"encoder/domain"
 	"github.com/jinzhu/gorm"
-	_"github.com/jinzhu/gorm/dialects/sqlite"
-	_"github.com/lib/pq"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/lib/pq"
 	"log"
 )
 
@@ -25,7 +25,7 @@ func NewDb() *Database {
 
 func NewDbTest() *gorm.DB {
 	dbInstance := NewDb()
-	dbInstance.Env = "Test"
+	dbInstance.Env = "test"
 	dbInstance.DbTypeTest = "sqlite3"
 	dbInstance.DsnTest = ":memory:"
 	dbInstance.AutoMigrateDb = true
@@ -34,7 +34,7 @@ func NewDbTest() *gorm.DB {
 	connection, err := dbInstance.Connect()
 
 	if err != nil {
-		log.Fatal("Test db error:%v", err)
+		log.Fatalf("Test db error: %v\n", err)
 	}
 	return connection
 }
@@ -54,8 +54,7 @@ func (d *Database) Connect() (*gorm.DB, error) {
 	}
 	if d.AutoMigrateDb {
 		d.Db.AutoMigrate(&domain.Video{}, &domain.Job{})
-		d.Db.Model(domain.Job{}).AddForeignKey("video_id", "videos (id)",
-			"CASCADE", "CASCADE")
+		d.Db.Model(domain.Job{}).AddForeignKey("video_id", "videos (id)","CASCADE", "CASCADE")
 	}
 	return d.Db, nil
 }
