@@ -57,7 +57,7 @@ func TestJobRepositoryUpdate(t *testing.T) {
 	repoJob.Update(job)
 
 	j, err := repoJob.Find(job.ID)
-	require.NotEmpty(t, j.ID)
 	require.Nil(t, err)
+	require.NotEmpty(t, j.ID)
 	require.Equal(t, j.Status, job.Status)
 }
